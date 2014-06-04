@@ -16,7 +16,7 @@ def weighted_variance(counts):
         avg += count * length
 
     counts_only = counts.values()
-    print counts_only
+    #print counts_only
     avg /= sum(counts_only)
 
     var = 0
@@ -24,9 +24,12 @@ def weighted_variance(counts):
     for length, count in counts.iteritems():
         var += count * math.pow((length - avg),2)
 
-    var /= sum(counts_only) - 1
+    try:
+        var /= sum(counts_only) - 1
+    except:
+        raise Exception("Division by zero due to too few counts!")
 
-    print var
+    #print var
     return var
 
 def runs_test(path):
@@ -69,8 +72,8 @@ def runs_test(path):
 #x = [1,1,1,1,2,2,2]
 #x = [1,1,1,3,2,1,2,1]
 #x = [2,1,1,2,1,1,2]
-#x = [2,2,1,3,3,1,3,3,3,1,2,1,1,1,2,1,1,2,2,1,2,1,1,2,1,2,2]
-x = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2]
+x = [2,2,1,3,3,1,3,3,3,1,2,1,1,1,2,1,1,2,2,1,2,1,1,2,1,2,2]
+#x = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2]
 
 runs_test(x)
 
