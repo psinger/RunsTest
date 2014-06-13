@@ -61,10 +61,12 @@ def runs_test(input, path = True):
     else:
         cats = input
 
-    print cats
+    #print cats
 
     x2 = 0
     df = 0
+    nr_elem = len(cats.keys())
+    fail_cnt = 0
 
     for elem in cats.keys():
         #print elem
@@ -76,13 +78,12 @@ def runs_test(input, path = True):
         #print ns
         rs = sum(cats[elem].values())
 
-        print ns, rs
+        #print ns, rs
 
         if len(cats[elem].keys()) == 1 or rs == 1 or (ns-rs) == 1:
-        #if rs == 1 or (ns-rs) == 1:
-            print elem
-            raise Exception("One category has only one run length or only one run or ns-rs equals one! Sorry!")
-            #print cats[elem]
+        #if rs == 1 or (ns-rs) == 1:x
+            #print "Category '%s' has only one run length or only one run or ns-rs equals one! Sorry I will ignore it!" % elem
+            fail_cnt += 1
             continue
 
         #print rs
@@ -93,9 +94,13 @@ def runs_test(input, path = True):
         vs = cs * ns * (ns-rs) / (rs*(rs+1))
 
         x2 += ss * cs
-        print x2
+        #print x2
         #sys.exit()
         df += vs
+
+    #note that this is kind-of a hack, you can adapt this as wanted
+    if nr_elem - fail_cnt < 2:
+        raise Exception("I ignored too many categories of this sequences! Sorry can't do the test!")
 
     if x2 == 0 or df == 0:
         raise Exception("x2 or df are zero, this really shouldn't happen!")
@@ -114,11 +119,11 @@ def runs_test(input, path = True):
 
 
 #recalculation of results in O'Brien
-runs_test({'M':{1:29, 2:10, 3:8, 4:3, 5:1, 6:1, 7:1, 8:1, 12:2}, 'D':{1:33, 2:17, 3:6, 5:1}}, path=False)
+#runs_test({'M':{1:29, 2:10, 3:8, 4:3, 5:1, 6:1, 7:1, 8:1, 12:2}, 'D':{1:33, 2:17, 3:6, 5:1}}, path=False)
 
 #this will produce an exception
 #runs_test(["S", "S", "S", "F", "S", "F", "S", "S", "S", "F", "F", "S", "S", "S"])
 
-runs_test(["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"])
+#runs_test(["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"])
 
-runs_test(["S", "S", "S", "F", "S", "F", "F", "F", "F"])
+#runs_test(["S", "S", "S", "F", "S", "F", "F", "F", "F"])
