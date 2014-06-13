@@ -35,26 +35,33 @@ def weighted_variance(counts):
     #print var
     return var
 
-def runs_test(path):
+def runs_test(input, path = True):
+    '''
+    You can pass a path or a dictionary of runs lengths
+    path_passed = True states that you pass a path
+    '''
 
-    counter = 1
-    same = True
-    cats = defaultdict(lambda : defaultdict(int))
+    if path == True:
+        counter = 1
+        same = True
+        cats = defaultdict(lambda : defaultdict(int))
 
-    for i, elem in enumerate(path):
-        #print elem, i
-        if i == len(path) - 1:
-            cats[elem][counter] += 1
-            break
+        for i, elem in enumerate(input):
+            #print elem, i
+            if i == len(input) - 1:
+                cats[elem][counter] += 1
+                break
 
-        if path[i+1] == elem:
-            same = True
-            counter += 1
-        else:
-            cats[elem][counter] += 1
-            counter = 1
+            if input[i+1] == elem:
+                same = True
+                counter += 1
+            else:
+                cats[elem][counter] += 1
+                counter = 1
+    else:
+        cats = input
 
-    #print cats
+    print cats
 
     x2 = 0
     df = 0
@@ -64,13 +71,18 @@ def runs_test(path):
         #print cats[elem].keys()
         #print cats[elem]
         #print [x for x in path if x == elem]
-        ns = len([x for x in path if x == elem])
+        #ns = len([x for x in path if x == elem])
+        ns = sum([x*y for x,y in cats[elem].iteritems()])
         #print ns
         rs = sum(cats[elem].values())
 
+        print ns, rs
+
         if len(cats[elem].keys()) == 1 or rs == 1 or (ns-rs) == 1:
+        #if rs == 1 or (ns-rs) == 1:
             print elem
-            print cats[elem]
+            raise Exception("One category has only one run length or only one run or ns-rs equals one! Sorry!")
+            #print cats[elem]
             continue
 
         #print rs
@@ -81,24 +93,32 @@ def runs_test(path):
         vs = cs * ns * (ns-rs) / (rs*(rs+1))
 
         x2 += ss * cs
-        #print x2
+        print x2
         #sys.exit()
         df += vs
 
-    print x2, df
-    print chi2.cdf(x2,df)
-    print "%.10f" % chi2.sf(x2,df)
+    if x2 == 0 or df == 0:
+        return -1
+    #print x2, df
+    #print chi2.cdf(x2,df)
+    pval = chi2.sf(x2,df)
+    print "p-val %.10f" % pval
+    return pval
 
-#x = [1,1,1,1,2,2,2]
-#x = [1,1,1,3,2,1,2,1]
-#x = [2,1,1,2,1,1,2]
-#x = [2,2,1,3,3,1,3,3,3,1,2,1,1,1,2,1,1,2,2,1,2,1,1,2,1,2,2]
-#x = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,3,2]
+#x = ["S", "S", "F", "S", "F", "F", "F", "F", "S", "S", "S", "F", "F"]
 
-x = ["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"]
+#x = ["S", "S", "S", "F", "S", "F", "S", "S", "S", "F", "F", "S", "S", "S"]
 
-runs_test(x)
+#x = ["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"]
+#x = ["S","S","S","S","S","F", "F", "F", "F", "F","S","S","S","S","S","F", "F", "F", "F", "F", "S", "F"]
 
-#weighted_variance(dict({1:4, 2:3}))
 
-#weighted_variance(x)
+#recalculation of results in O'Brien
+runs_test({'M':{1:29, 2:10, 3:8, 4:3, 5:1, 6:1, 7:1, 8:1, 12:2}, 'D':{1:33, 2:17, 3:6, 5:1}}, path=False)
+
+#this will produce an exception
+#runs_test(["S", "S", "S", "F", "S", "F", "S", "S", "S", "F", "F", "S", "S", "S"])
+
+runs_test(["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"])
+
+runs_test(["S", "S", "S", "F", "S", "F", "F", "F", "F"])
