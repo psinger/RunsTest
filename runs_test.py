@@ -98,7 +98,7 @@ def runs_test(input, path = True):
         df += vs
 
     if x2 == 0 or df == 0:
-        return -1
+        raise Exception("x2 or df are zero, this really shouldn't happen!")
     #print x2, df
     #print chi2.cdf(x2,df)
     pval = chi2.sf(x2,df)
