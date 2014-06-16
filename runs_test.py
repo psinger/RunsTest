@@ -10,15 +10,13 @@ from scipy.stats import chi2
 def weighted_variance(counts):
     #counts = Counter(x).items()
 
-    #print counts
-
     avg = 0
 
     for length, count in counts.iteritems():
         avg += count * length
 
     counts_only = counts.values()
-    #print counts_only
+
     avg /= sum(counts_only)
 
     var = 0
@@ -32,7 +30,6 @@ def weighted_variance(counts):
         #var = 0
         raise Exception("Division by zero due to too few counts!")
 
-    #print var
     return var
 
 def runs_test(input, path = True):
@@ -69,19 +66,15 @@ def runs_test(input, path = True):
     fail_cnt = 0
 
     for elem in cats.keys():
-        #print elem
-        #print cats[elem].keys()
-        #print cats[elem]
-        #print [x for x in path if x == elem]
-        #ns = len([x for x in path if x == elem])
         ns = sum([x*y for x,y in cats[elem].iteritems()])
         #print ns
         rs = sum(cats[elem].values())
 
         #print ns, rs
 
+        #at the moment elements that have the following limitations get ignored
+        #one could also think about throwing an exception here and stopping the calculation
         if len(cats[elem].keys()) == 1 or rs == 1 or (ns-rs) == 1:
-        #if rs == 1 or (ns-rs) == 1:x
             #print "Category '%s' has only one run length or only one run or ns-rs equals one! Sorry I will ignore it!" % elem
             fail_cnt += 1
             continue
@@ -95,7 +88,6 @@ def runs_test(input, path = True):
 
         x2 += ss * cs
         #print x2
-        #sys.exit()
         df += vs
 
     #note that this is kind-of a hack, you can adapt this as wanted
@@ -119,11 +111,11 @@ def runs_test(input, path = True):
 
 
 #recalculation of results in O'Brien
-#runs_test({'M':{1:29, 2:10, 3:8, 4:3, 5:1, 6:1, 7:1, 8:1, 12:2}, 'D':{1:33, 2:17, 3:6, 5:1}}, path=False)
+runs_test({'M':{1:29, 2:10, 3:8, 4:3, 5:1, 6:1, 7:1, 8:1, 12:2}, 'D':{1:33, 2:17, 3:6, 5:1}}, path=False)
 
 #this will produce an exception
 #runs_test(["S", "S", "S", "F", "S", "F", "S", "S", "S", "F", "F", "S", "S", "S"])
 
-#runs_test(["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"])
+runs_test(["B","B","A","C","C","A","C","C","C","A","B","A","A","A","B","A","A","B","B","A","B","A","A","B","A","B","B"])
 
-#runs_test(["S", "S", "S", "F", "S", "F", "F", "F", "F"])
+runs_test(["S", "S", "S", "F", "S", "F", "F", "F", "F"])
