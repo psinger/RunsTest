@@ -1,5 +1,14 @@
 from __future__ import division
 
+'''
+This test and code was motivated by 
+http://stats.stackexchange.com/questions/100838/autocorrelation-of-discrete-time-series
+and
+http://stats.stackexchange.com/questions/73084/analysis-of-temporal-patterns/73170#73170
+as described in
+P. C. O'Brien and P. J. Dyck. A runs test based on run lengths. Biometrics, pages 237-244, 1985.
+'''
+
 __author__ = 'psinger'
 
 from collections import Counter, defaultdict
